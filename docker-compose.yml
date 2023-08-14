@@ -1,0 +1,88 @@
+version: '3.4'
+
+services:
+  server:
+    build: 
+      context: 'server'
+      dockerfile:  'DockerfileApi'
+    container_name:  'server'
+    ports:
+      - '7043:80'
+    environment:
+      CONNECTION_STRING_DOCKER: "host=db;Database=messagedb;Port=5432;Username=postgres;Password=admin"
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - zenko
+      - mongo
+      - rabbitmq
+    restart: on-failure   
+      
+  client:
+    build:
+      context: 'client'
+      dockerfile: 'Dockerfile'
+    container_name: 'client'
+    ports:
+      - '2000:2000'
+
+  consumer:
+    build: 
+      context: 'server'
+      dockerfile:  'DockerfileBackground'
+    container_name: 'consumer'
+    environment:
+      CONNECTION_STRING_DOCKER: "host=db;Database=messagedb;Port=5432;Username=postgres;Password=admin"
+    ports:
+      - "8043:80" 
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+  
+  db:
+    build: 
+      context: 'server/DataBase'
+      dockerfile: 'Dockerfile'
+    container_name: 'db'
+    ports:
+      - '5432:5433'
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "messagedb"
+    restart: on-failure
+
+  zenko:
+    image: zenko/cloudserver:latest
+    container_name: zenko
+    environment:
+      SCALITY_ACCESS_KEY_ID: "AKIAIOSFODNN7EXAMPLE"
+      SCALITY_SECRET_ACCESS_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+      S3DATA: "multiple"
+      S3BACKEND: "mem"
+      ENDPOINT: "zenko"
+    ports:
+      - '8000:8000'
+    
+  rabbitmq:
+    image: rabbitmq
+    container_name: 'rabbitmq'
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  mongo:
+    image: mongo:latest
+    container_name: 'mongo'
+    volumes:
+      - ~/mongo-db:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=mongo_test
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    ports:
+      - '27017:27017'
+
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379:6379'
