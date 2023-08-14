@@ -9,7 +9,7 @@ public static class RedisConfiguration
 {
     public static IServiceCollection AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
-        var configurationOptions = new ConfigurationOptions()
+        var configurationOptions = new ConfigurationOptions
         {
             EndPoints =
             {
@@ -18,8 +18,8 @@ public static class RedisConfiguration
         };
 
         services.AddSingleton<IConnectionMultiplexer>(options => ConnectionMultiplexer.Connect(configurationOptions));
-        services.AddTransient<ICacheService, CacheService>(); 
-        
+        services.AddTransient<ICacheService, CacheService>();
+
         return services;
     }
 }

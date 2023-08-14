@@ -1,5 +1,4 @@
-﻿
-using Amazon;
+﻿using Amazon;
 using Amazon.S3;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,9 @@ public static class AwsConfigurations
 
         return services;
     }
-    
-    private static AmazonS3Client GetS3Client(IConfiguration configuration, AmazonS3Config s3Config) 
-        => new(configuration["AwsConfiguration:AccessKey"], configuration["AwsConfiguration:SecretKey"], s3Config);
+
+    private static AmazonS3Client GetS3Client(IConfiguration configuration, AmazonS3Config s3Config)
+    {
+        return new(configuration["AwsConfiguration:AccessKey"], configuration["AwsConfiguration:SecretKey"], s3Config);
+    }
 }

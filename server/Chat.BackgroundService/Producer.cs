@@ -16,24 +16,24 @@ public class Producer
 
     public void SendMessage(DataUploadedMessage message)
     {
-        var factory = new ConnectionFactory() { HostName = "rabbitmq" };
+        var factory = new ConnectionFactory { HostName = "rabbitmq" };
         using (var connection = factory.CreateConnection())
         using (var channel = connection.CreateModel())
         {
-            channel.QueueDeclare(queue: _queueName,
-                durable: false,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+            channel.QueueDeclare(_queueName,
+                false,
+                false,
+                false,
+                null);
 
             var messageJson = JsonSerializer.Serialize(message);
-            
+
             var body = Encoding.UTF8.GetBytes(messageJson);
 
-            channel.BasicPublish(exchange: "",
-                routingKey: _queueName,
-                basicProperties: null,
-                body: body);
+            channel.BasicPublish("",
+                _queueName,
+                null,
+                body);
         }
     }
 }

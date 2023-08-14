@@ -13,7 +13,7 @@ public static class ConfigurePostgres
             var dockerEnv = Environment.GetEnvironmentVariable("CONNECTION_STRING_DOCKER");
             options.UseNpgsql(dockerEnv ?? configuration.GetConnectionString("MessageDb"));
         });
-        
+
         return services;
     }
 }

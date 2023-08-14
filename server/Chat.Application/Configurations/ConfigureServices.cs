@@ -1,7 +1,6 @@
 ﻿using Chat.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
 
 namespace Chat.Application.Configurations;
 
@@ -12,7 +11,7 @@ public static class ConfigureServices
         services.AddAws(configuration);
         services.AddTransient<IMessageService, MessageService>();
         services.AddTransient<IChatService, ChatService>();
-        services.AddTransient<IStorageService,StorageService>();
+        services.AddTransient<IStorageService, StorageService>();
         services.AddRedis(configuration);
 
         return services;

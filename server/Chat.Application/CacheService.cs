@@ -1,5 +1,4 @@
-﻿using Chat.Domain.Metadata;
-using Chat.Interfaces;
+﻿using Chat.Interfaces;
 using Shared.Enums;
 using StackExchange.Redis;
 
@@ -7,9 +6,15 @@ namespace Chat.Application;
 
 public class CacheService : ICacheService
 {
-    private IDatabase _db;
     private readonly IConnectionMultiplexer _muxer;
-    
+    private IDatabase _db;
+
+    public CacheService(IConnectionMultiplexer muxer)
+    {
+        _muxer = muxer;
+        _db = muxer.GetDatabase((int)Database.Common);
+    }
+
     public void ChangeDatabase(Database database)
     {
         _db = database switch
@@ -21,12 +26,6 @@ public class CacheService : ICacheService
         };
     }
 
-    public CacheService(IConnectionMultiplexer muxer)
-    {
-        _muxer = muxer;
-        _db = muxer.GetDatabase((int) Database.Common);
-    }
-
     public bool SetData(string key, string value)
     {
         return _db.StringSet(key, value);
@@ -34,7 +33,7 @@ public class CacheService : ICacheService
 
     public string? GetData(string key)
     {
-        var value =  _db.StringGet(key);
+        var value = _db.StringGet(key);
         return value.ToString();
     }
 

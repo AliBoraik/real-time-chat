@@ -8,35 +8,35 @@ namespace Chat.BackgroundService.Handlers;
 
 public class MessageSentHandler : Microsoft.Extensions.Hosting.BackgroundService
 {
-    private IConnection _connection;
-    private IModel _channel;
-    private ConnectionFactory _connectionFactory;
-    private IMessageService _messageService;
     private readonly string _queueName;
+    private IModel _channel;
+    private IConnection _connection;
+    private ConnectionFactory _connectionFactory;
+    private readonly IMessageService _messageService;
 
     public MessageSentHandler(IMessageService messageService)
     {
         _messageService = messageService;
         _queueName = "ChatApp.Messages";
     }
-    
+
     public override Task StartAsync(CancellationToken cancellationToken)
     {
         _connectionFactory = new ConnectionFactory
         {
-            HostName = "rabbitmq",
+            HostName = "rabbitmq"
         };
-        
+
         _connection = _connectionFactory.CreateConnection();
         _channel = _connection.CreateModel();
-        _channel.QueueDeclare(queue: _queueName,
-            durable: false,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
+        _channel.QueueDeclare(_queueName,
+            false,
+            false,
+            false,
+            null);
         return base.StartAsync(cancellationToken);
     }
-    
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var consumer = new EventingBasicConsumer(_channel);
@@ -54,7 +54,7 @@ public class MessageSentHandler : Microsoft.Extensions.Hosting.BackgroundService
             }
         };
 
-        _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
+        _channel.BasicConsume(_queueName, true, consumer);
 
         await Task.CompletedTask;
     }

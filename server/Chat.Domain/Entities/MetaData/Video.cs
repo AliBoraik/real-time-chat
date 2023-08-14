@@ -1,6 +1,4 @@
 ﻿namespace Chat.Domain.Dto;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 public class Video
 {

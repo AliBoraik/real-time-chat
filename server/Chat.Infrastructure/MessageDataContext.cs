@@ -5,8 +5,13 @@ namespace Chat.Infrastructure;
 
 public class MessageDataContext : DbContext
 {
-    public MessageDataContext() {}
-    public MessageDataContext(DbContextOptions options) : base(options) {}
+    public MessageDataContext()
+    {
+    }
+
+    public MessageDataContext(DbContextOptions options) : base(options)
+    {
+    }
 
     public DbSet<Domain.Entities.Chat> Chats { get; set; }
     public DbSet<Message> Messages { get; set; }

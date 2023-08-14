@@ -1,9 +1,7 @@
-using Chat.Application;
 using Chat.Application.Configurations;
 using Chat.BackgroundService;
 using Chat.BackgroundService.Handlers;
 using Chat.Infrastructure.Configurations;
-using Chat.Interfaces;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")

@@ -20,7 +20,7 @@ public class ChatService : IChatService
 
     public async Task<Guid> AddChat(Guid userId)
     {
-        var chat = new Domain.Entities.Chat()
+        var chat = new Domain.Entities.Chat
         {
             Id = userId,
             ClientId = userId.ToString(),
@@ -31,14 +31,14 @@ public class ChatService : IChatService
         await _context.SaveChangesAsync();
         return chat.Id;
     }
-    
+
     public async Task<bool> JoinAdmin(Guid chatId, Guid adminId)
     {
         var chat = await _context.Chats.FirstOrDefaultAsync(ch => ch.Id == chatId);
 
         if (chat.IsProcessing)
             return false;
-        
+
         chat.AdminId = adminId.ToString();
         chat.IsProcessing = true;
         await _context.SaveChangesAsync();

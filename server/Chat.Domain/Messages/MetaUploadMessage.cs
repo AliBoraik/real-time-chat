@@ -3,6 +3,4 @@
 public class MetaUploadMessage
 {
     public Guid RequestId { get; set; }
-    
-    
 }

@@ -30,7 +30,7 @@ public class HelpController : Controller
             return NotFound();
         return Ok(result);
     }
-    
+
     [HttpPost("cache")]
     public IActionResult Set(string key, string value)
     {

@@ -1,54 +1,88 @@
-﻿using Chat.Api.Hubs;
-using Chat.Api.Hubs.Clients;
-using Chat.Api.Producer;
-using Chat.Domain;
-using Chat.Domain.Entities;
-using Chat.Domain.Enums;
-using Chat.Interfaces;
+﻿using Chat.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
-namespace Chat.Api.Controllers
+namespace Chat.Api.Controllers;
+
+[ApiController]
+[Route("api/message")]
+public class MessageController : Controller
 {
-    [ApiController]
-    [Route("api/message")]
-    public class MessageController : Controller
-    {
-        private readonly IMessageService _messageService;
-        private readonly IChatService _chat;
-        public MessageController(IMessageService messageService, IChatService chat)
-        {
-            _messageService = messageService;
-            _chat = chat;
-        }
+    private readonly IChatService _chat;
+    private readonly IMessageService _messageService;
 
-        [HttpGet("chats/history")]
-        public async Task<IActionResult> GetHistory(Guid chatId)
+    public MessageController(IMessageService messageService, IChatService chat)
+    {
+        _messageService = messageService;
+        _chat = chat;
+    }
+
+    [HttpGet("chats/history")]
+    public async Task<IActionResult> GetHistory(Guid chatId)
+    {
+        try
         {
             var messages = await _messageService.GetFromChat(chatId);
+            if (!messages.Any()) return NotFound("No messages found for the given chat ID.");
             return Ok(messages);
         }
-        
-        [HttpGet("messages/all")]
-        public async Task<IActionResult> GetAllMessages()
+        catch (Exception ex)
+        {
+            return HandleError(ex);
+        }
+    }
+
+    [HttpGet("messages/all")]
+    public async Task<IActionResult> GetAllMessages()
+    {
+        try
         {
             var messages = await _messageService.GetAll();
+            if (!messages.Any()) return NotFound("No messages found.");
             return Ok(messages);
         }
-        
-        
-        [HttpGet("chats/free")]
-        public async Task<IActionResult> GetFreeChats()
+        catch (Exception ex)
+        {
+            return HandleError(ex);
+        }
+    }
+
+    [HttpGet("chats/free")]
+    public async Task<IActionResult> GetFreeChats()
+    {
+        try
         {
             var chats = await _chat.GetFree();
+            if (!chats.Any()) return NotFound("No free chats found.");
             return Ok(chats);
         }
-        
-        [HttpGet("chats")]
-        public async Task<IActionResult> GetChats()
+        catch (Exception ex)
+        {
+            return HandleError(ex);
+        }
+    }
+
+    [HttpGet("chats")]
+    public async Task<IActionResult> GetChats()
+    {
+        try
         {
             var chats = await _chat.GetAll();
+            if (!chats.Any()) return NotFound("No chats found.");
             return Ok(chats);
         }
+        catch (Exception ex)
+        {
+            return HandleError(ex);
+        }
+    }
+
+    private IActionResult HandleError(Exception ex)
+    {
+        // Log the exception here if needed
+        return Problem(
+            ex.Message,
+            statusCode: 500,
+            title: "An error occurred"
+        );
     }
 }

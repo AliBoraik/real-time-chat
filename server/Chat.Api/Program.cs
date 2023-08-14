@@ -1,10 +1,7 @@
 using Chat.Api.Hubs;
 using Chat.Api.Producer;
-using Chat.Application;
 using Chat.Application.Configurations;
-using Chat.Infrastructure;
 using Chat.Infrastructure.Configurations;
-
 
 var builder = WebApplication.CreateBuilder(args);
 

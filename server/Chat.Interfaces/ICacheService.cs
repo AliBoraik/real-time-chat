@@ -1,6 +1,4 @@
-﻿using Chat.Domain.Metadata;
-using Microsoft.AspNetCore.Http;
-using Shared.Enums;
+﻿using Shared.Enums;
 
 namespace Chat.Interfaces;
 

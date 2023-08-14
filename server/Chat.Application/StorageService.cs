@@ -1,13 +1,10 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
-using Amazon.Util.Internal;
-using Chat.Domain;
 using Chat.Domain.Dto;
 using Chat.Interfaces;
 using Microsoft.AspNetCore.Http;
-using S3Object = Chat.Domain.Dto.S3Object;
-
+using S3Object = Amazon.S3.Model.S3Object;
 
 namespace Chat.Application;
 
@@ -22,13 +19,13 @@ public class StorageService : IStorageService
 
     public async Task<S3ResponseDto> UploadFileAsync(IFormFile file)
     {
-        var obj = new S3Object
+        var obj = new Domain.Dto.S3Object
         {
             File = file,
             Name = file.FileName,
             BucketName = "temp"
         };
-        
+
         await using var newMemoryStream = new MemoryStream();
         await obj.File.CopyToAsync(newMemoryStream);
 
@@ -42,11 +39,10 @@ public class StorageService : IStorageService
 
         var transferUtility = new TransferUtility(_amazonS3);
 
-        
-        
+
         await transferUtility.UploadAsync(uploadRequest);
 
-        var response = new S3ResponseDto()
+        var response = new S3ResponseDto
         {
             StatusCode = 201,
             Message = $"{obj.Name} has been uploaded successfully",
@@ -57,7 +53,7 @@ public class StorageService : IStorageService
 
     public async Task<GetObjectResponse> DownloadFileAsync(string objKey, string bucketName)
     {
-        var downloadRequest = new GetObjectRequest()
+        var downloadRequest = new GetObjectRequest
         {
             BucketName = bucketName,
             Key = objKey
@@ -67,8 +63,8 @@ public class StorageService : IStorageService
 
         return response;
     }
-    
-    public async Task<List<Amazon.S3.Model.S3Object>> GetAllObjectFromBucketAsync(string bucketName)
+
+    public async Task<List<S3Object>> GetAllObjectFromBucketAsync(string bucketName)
     {
         var response = await _amazonS3.ListObjectsAsync(bucketName);
 
@@ -77,15 +73,15 @@ public class StorageService : IStorageService
 
     public async Task CreateBucketAsync(string name)
     {
-        var bucketRequest = new PutBucketRequest()
+        var bucketRequest = new PutBucketRequest
         {
             BucketName = name,
-            UseClientRegion = true,
+            UseClientRegion = true
         };
-        
+
         await _amazonS3.PutBucketAsync(bucketRequest);
     }
-    
+
     public async Task<ListBucketsResponse> GetAllBuckets()
     {
         return await _amazonS3.ListBucketsAsync();

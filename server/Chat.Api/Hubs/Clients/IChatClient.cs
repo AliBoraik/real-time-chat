@@ -1,11 +1,8 @@
-﻿
-using Chat.Domain;
-using Chat.Domain.Entities;
+﻿using Chat.Domain.Entities;
 
-namespace Chat.Api.Hubs.Clients
+namespace Chat.Api.Hubs.Clients;
+
+public interface IChatClient
 {
-    public interface IChatClient
-    {
-        Task ReceiveMessage(Message message);
-    }
+    Task ReceiveMessage(Message message);
 }
