@@ -48,3 +48,4 @@ The key components and microservices in your application are:
 5. **Database Service:** Each microservice typically has its own database or data store optimized for its specific needs. This separation enables independent scaling and performance optimization.
 
 6. **Frontend Microservice (React):** The frontend microservice provides the user interface for interacting with the application. It communicates with the backend microservices via APIs and integrates real-time updates using SignalR.
+
