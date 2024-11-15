@@ -44,7 +44,6 @@ The key components and microservices in your application are:
 3. **File and Metadata Service:** Responsible for managing the upload, storage, and retrieval of files and associated metadata. This service integrates with Zenko for efficient S3-compatible storage.
 
 4. **Message Processing Service (MassTransit and RabbitMQ):** The MassTransit-based message processing service processes messages from various sources, such as the real-time communication service and file service. RabbitMQ ensures reliable message delivery and communication between different microservices.
-5. 
 
 6. **Database Service:** Each microservice typically has its own database or data store optimized for its specific needs. This separation enables independent scaling and performance optimization.
 
