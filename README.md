@@ -9,6 +9,7 @@ List the technologies and frameworks you're using in your project:
 - ASP.NET Core
 - React
 - SignalR
+- PostgreSQL
 - RabbitMQ
 - Docker
 - Zenko (S3-compatible storage)
