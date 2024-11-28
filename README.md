@@ -19,7 +19,7 @@ List the technologies and frameworks you're using in your project:
 1. Clone the repository:
 2. Build and run the Docker containers:
 ```shell
-docker-compose up
+docker compose up
 ```
 ## Features
 
