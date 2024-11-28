@@ -2,7 +2,7 @@
 
 This is a chat application built using .NET Core, and React. It enables real-time messaging between users.
 
-## Technologies Used
+## Technologies Used 
 
 List the technologies and frameworks you're using in your project:
 
