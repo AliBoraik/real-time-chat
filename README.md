@@ -1,6 +1,6 @@
 # Chat App 
 
-This is a chat application built using .NET Core, and React. It enables real-time messaging between users .
+This is a chat application built using .NET Core, and React. It enables real-time messaging between users.
 
 ## Technologies Used 
 
